@@ -1,17 +1,56 @@
+{% load static %}
 {% extends 'store/base.html' %}
 
 {% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card shadow border-danger">
+                
+                <div class="card-header bg-danger text-white py-3">
+                    <h3 class="mb-0 fs-5 fw-bold">⚠️ Confirmar Eliminación</h3>
+                </div>
+                
+                <div class="card-body py-4">
+                    <p class="fs-5 text-dark">
+                        ¿Estás seguro de que deseas eliminar permanentemente el producto: 
+                        <br><strong class="text-danger">"{{ product.name }}"</strong>?
+                    </p>
+                    
+                    {% if product.image %}
+                        <div class="my-3">
+                            <img src="{{ product.image.url }}" 
+                                 alt="{{ product.name }}" 
+                                 class="img-thumbnail object-fit-cover" 
+                                 style="height: 120px; width: 120px;">
+                        </div>
+                    {% endif %}
+                    
+                    <p class="text-muted small">Esta acción no se puede deshacer.</p>
 
-<h3>¿Eliminar "{{ product.name }}"?</h3>
+                    <form method="POST" class="d-inline-block mt-2">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 me-2">
+                            Sí, eliminar
+                        </button>
+                    </form>
+                    
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary rounded-pill px-4 mt-2">
+                        Cancelar
+                    </a>
+                </div>
 
-<form method="POST">
-    {% csrf_token %}
-    <button class="btn btn-danger">Sí, eliminar</button>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
-</form>
+            </div>
 
-{% if user.is_authenticated and user.is_seller %}
-    <a href="{% url 'dashboard' %}" class="btn btn-warning btn-sm me-2">Dashboard</a>
-{% endif %}
+            {% if user.is_authenticated and user.is_seller %}
+                <div class="mt-4">
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline-warning btn-sm">
+                        Volver al Dashboard
+                    </a>
+                </div>
+            {% endif %}
 
+        </div>
+    </div>
+</div>
 {% endblock %}
